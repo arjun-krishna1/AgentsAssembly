@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Dashboard</title>
+    <!-- Add your CSS and JS dependencies here -->
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'agent_settings' %}">Agent Settings</a></li>
+            <li><a href="{% url 'create_bill' %}">Create Bill</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>Bills Dashboard</h1>
+        
+        <div class="filters">
+            <select id="sortBy">
+                <option value="deadline">Sort by Deadline</option>
+                <option value="funding">Sort by Funding</option>
+            </select>
+        </div>
+
+        <div id="billsGrid">
+            {% for bill in bills %}
+            <div class="bill-card">
+                <h2>{{ bill.title }}</h2>
+                <p>{{ bill.description }}</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: {{ bill.funding_progress }}%"></div>
+                </div>
+                <p>Funding: {{ bill.current_funding }} / {{ bill.funding_goal }} tokens</p>
+                <p>Deadline: {{ bill.deadline }}</p>
+                <p>Status: {{ bill.status }}</p>
+                {% if bill.status == 'PENDING' %}
+                <form class="vote-form" data-bill-id="{{ bill.id }}">
+                    <input type="number" name="tokens" min="0" placeholder="Tokens to commit">
+                    <button type="submit">Vote</button>
+                </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <script>
+        // Handle voting form submission
+        document.querySelectorAll('.vote-form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const billId = form.dataset.billId;
+                const tokens = form.elements.tokens.value;
+                
+                try {
+                    const response = await fetch(`/api/bills/${billId}/vote/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ tokens: parseInt(tokens) })
+                    });
+                    if (response.ok) {
+                        location.reload();
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Bill</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'agent_settings' %}">Agent Settings</a></li>
+            <li><a href="{% url 'create_bill' %}">Create Bill</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>Create New Bill</h1>
+        
+        <form id="createBillForm">
+            <div>
+                <label>Title:
+                    <input type="text" name="title" required>
+                </label>
+            </div>
+            <div>
+                <label>Description:
+                    <textarea name="description" required></textarea>
+                </label>
+            </div>
+            <div>
+                <label>Funding Goal (tokens):
+                    <input type="number" name="funding_goal" required>
+                </label>
+            </div>
+            <div>
+                <label>Deadline:
+                    <input type="date" name="deadline" required>
+                </label>
+            </div>
+
+            <h2>Impact Statements</h2>
+            <div>
+                <label>Environmental Impact:
+                    <textarea name="environmental_impact"></textarea>
+                </label>
+            </div>
+            <div>
+                <label>Economic Impact:
+                    <textarea name="economic_impact"></textarea>
+                </label>
+            </div>
+            <div>
+                <label>Social Impact:
+                    <textarea name="social_impact"></textarea>
+                </label>
+            </div>
+
+            <div>
+                <label>Supporting Documents:
+                    <input type="file" name="documents" multiple>
+                </label>
+            </div>
+
+            <button type="submit">Submit Bill</button>
+        </form>
+    </main>
+</body>
+</html> 

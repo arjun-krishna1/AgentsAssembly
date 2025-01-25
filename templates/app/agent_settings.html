@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Settings</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'agent_settings' %}">Agent Settings</a></li>
+            <li><a href="{% url 'create_bill' %}">Create Bill</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>Voting Agent Settings</h1>
+        
+        <form id="preferencesForm">
+            <h2>Impact Preferences</h2>
+            <div>
+                <label>Environmental Impact (0-100):
+                    <input type="range" min="0" max="100" name="environmental">
+                </label>
+            </div>
+            <div>
+                <label>Economic Growth (0-100):
+                    <input type="range" min="0" max="100" name="economic">
+                </label>
+            </div>
+            <div>
+                <label>Social Welfare (0-100):
+                    <input type="range" min="0" max="100" name="social">
+                </label>
+            </div>
+
+            <h2>Token Allocation Strategy</h2>
+            <select name="strategy">
+                <option value="conservative">Conservative</option>
+                <option value="moderate">Moderate</option>
+                <option value="aggressive">Aggressive</option>
+            </select>
+
+            <button type="submit">Save Preferences</button>
+        </form>
+    </main>
+</body>
+</html> 
