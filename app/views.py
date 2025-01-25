@@ -27,7 +27,7 @@ def dashboard(request):
 def agent_settings(request):
     """View for managing voting agent preferences"""
     if request.method == 'POST':
-        preferences, created = AgentPreferences.objects.get_or_create(user=request.user)
+        preferences, created = AgentPreferences()
         preferences.environmental_weight = request.POST.get('environmental', 50)
         preferences.economic_weight = request.POST.get('economic', 50)
         preferences.social_weight = request.POST.get('social', 50)
@@ -35,7 +35,7 @@ def agent_settings(request):
         preferences.save()
         return redirect('dashboard')
 
-    preferences = AgentPreferences.objects.filter(user=request.user).first()
+    preferences = AgentPreferences.objects.last()
     return render(request, 'app/agent_settings.html', {'preferences': preferences})
 
 #@login_required
