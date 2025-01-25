@@ -1,15 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from .models import Bill, AgentPreferences, Vote
-import json
-from django.db import models, transaction
+from .models import Bill, AgentPreferences
+from django.db import transaction
 from datetime import datetime
 
-# Create your views here.
 
 def index(request):
     return render(request, 'app/index.html')
