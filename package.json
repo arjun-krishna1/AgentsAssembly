@@ -1,0 +1,7 @@
+{
+  "name": "AgentsAssembly",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:arjun-krishna1/AgentsAssembly.git",
+  "license": "MIT"
+}
