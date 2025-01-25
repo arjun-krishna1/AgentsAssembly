@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 
-class Bill(models.Model):
+class Project(models.Model):
     STATUS_CHOICES = [
         ('PENDING', 'Pending'),
         ('PASSED', 'Passed'),
@@ -61,10 +61,10 @@ class AgentPreferences(models.Model):
         return f"heres preferences"
 
 class Vote(models.Model):
-    bill = models.ForeignKey(Bill, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     tokens_committed = models.PositiveIntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
     agent = models.ForeignKey(AgentPreferences, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"vote on {self.bill.title}"
+        return f"vote on {self.project.title}"

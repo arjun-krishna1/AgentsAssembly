@@ -11,7 +11,7 @@
         <ul>
             <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
             <li><a href="{% url 'agent_settings' %}">Agent Settings</a></li>
-            <li><a href="{% url 'create_bill' %}">Create Project</a></li>
+            <li><a href="{% url 'create_project' %}">Create Project</a></li>
         </ul>
     </nav>
 
@@ -25,19 +25,19 @@
             </select>
         </div>
 
-        <div id="billsGrid">
-            {% for bill in bills %}
-            <div class="bill-card">
-                <h2>{{ bill.title }}</h2>
-                <p>{{ bill.description }}</p>
+        <div id="projectsGrid">
+            {% for project in projects %}
+            <div class="project-card">
+                <h2>{{ project.title }}</h2>
+                <p>{{ project.description }}</p>
                 <div class="progress-bar">
-                    <div class="progress" style="width: {{ bill.funding_progress }}%"></div>
+                    <div class="progress" style="width: {{ project.funding_progress }}%"></div>
                 </div>
-                <p>Funding: {{ bill.current_funding }} / {{ bill.funding_goal }} tokens</p>
-                <p>Deadline: {{ bill.deadline }}</p>
-                <p>Status: {{ bill.status }}</p>
-                {% if bill.status == 'PENDING' %}
-                <form class="vote-form" data-bill-id="{{ bill.id }}">
+                <p>Funding: {{ project.current_funding }} / {{ project.funding_goal }} tokens</p>
+                <p>Deadline: {{ project.deadline }}</p>
+                <p>Status: {{ project.status }}</p>
+                {% if project.status == 'PENDING' %}
+                <form class="vote-form" data-project-id="{{ project.id }}">
                     <input type="number" name="tokens" min="0" placeholder="Tokens to commit">
                     <button type="submit">Vote</button>
                 </form>
@@ -52,11 +52,11 @@
         document.querySelectorAll('.vote-form').forEach(form => {
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const billId = form.dataset.billId;
+                const projectId = form.dataset.projectId;
                 const tokens = form.elements.tokens.value;
                 
                 try {
-                    const response = await fetch(`/api/bills/${billId}/vote/`, {
+                    const response = await fetch(`/api/projects/${projectId}/vote/`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
