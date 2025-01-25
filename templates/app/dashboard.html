@@ -33,7 +33,7 @@
                 <div class="progress-bar">
                     <div class="progress" style="width: {{ project.funding_progress }}%"></div>
                 </div>
-                <p>Funding: {{ project.current_funding }} / {{ project.funding_goal }} tokens</p>
+                <p>Funding: {{ project.current_funding }} / {{ project.funding_goal }}</p>
                 <p>Deadline: {{ project.deadline }}</p>
                 <p>Status: {{ project.status }}</p>
                 {% if project.status == 'PENDING' %}

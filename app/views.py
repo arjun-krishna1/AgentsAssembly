@@ -6,6 +6,8 @@ from django.db import transaction
 from datetime import datetime
 import openai
 from django.conf import settings
+import os
+openai.api_key = os.environ.get('OPENAI_API_KEY')
 
 
 def index(request):
@@ -83,8 +85,9 @@ def create_project(request):
                     Respond only with one number, the number of tokens you commit without any other text or context.
                     """
 
-                    # Call OpenAI API
-                    response = openai.ChatCompletion.create(
+                    # Call OpenAI API - Updated to use environment variable
+                    client = openai.OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
+                    response = client.chat.completions.create(
                         model="gpt-3.5-turbo",
                         messages=[
                             {"role": "system", "content": "You are a voting agent making funding decisions."},
@@ -92,12 +95,14 @@ def create_project(request):
                         ]
                     )
 
+                    print("ARJUN LOG")
+                    print(response)
+                    print("ARJUN LOG")
+                    print(response.choices[0].message.content)
+
                     contribution = 0
-                    # Parse response
-                    try:
-                        contribution = int(response.choices[0].message.content.strip())
-                    except ValueError:
-                        contribution = 0
+                    # Parse response - Updated to ma
+                    contribution = int(response.choices[0].message.content.strip())
 
                     if contribution:
                         # Create vote record
