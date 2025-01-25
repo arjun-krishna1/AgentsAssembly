@@ -17,53 +17,84 @@
     <main>
         <h1>Create New Bill</h1>
         
-        <form id="createBillForm">
-            <div>
-                <label>Title:
-                    <input type="text" name="title" required>
-                </label>
+        <form method="POST" action="{% url 'create_bill' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
             </div>
-            <div>
-                <label>Description:
-                    <textarea name="description" required></textarea>
-                </label>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
             </div>
-            <div>
-                <label>Funding Goal (tokens):
-                    <input type="number" name="funding_goal" required>
-                </label>
+
+            <div class="form-group">
+                <label for="funding_goal">Funding Goal (tokens):</label>
+                <input type="number" id="funding_goal" name="funding_goal" min="1" required>
             </div>
-            <div>
-                <label>Deadline:
-                    <input type="date" name="deadline" required>
-                </label>
+
+            <div class="form-group">
+                <label for="deadline">Deadline:</label>
+                <input type="datetime-local" id="deadline" name="deadline" required>
             </div>
 
             <h2>Impact Statements</h2>
-            <div>
-                <label>Environmental Impact:
-                    <textarea name="environmental_impact"></textarea>
-                </label>
-            </div>
-            <div>
-                <label>Economic Impact:
-                    <textarea name="economic_impact"></textarea>
-                </label>
-            </div>
-            <div>
-                <label>Social Impact:
-                    <textarea name="social_impact"></textarea>
-                </label>
+            
+            <div class="form-group">
+                <label for="environmental_impact">Environmental Impact:</label>
+                <textarea id="environmental_impact" name="environmental_impact"></textarea>
             </div>
 
-            <div>
-                <label>Supporting Documents:
-                    <input type="file" name="documents" multiple>
-                </label>
+            <div class="form-group">
+                <label for="economic_impact">Economic Impact:</label>
+                <textarea id="economic_impact" name="economic_impact"></textarea>
             </div>
 
-            <button type="submit">Submit Bill</button>
+            <div class="form-group">
+                <label for="social_impact">Social Impact:</label>
+                <textarea id="social_impact" name="social_impact"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="documents">Supporting Documents:</label>
+                <input type="file" id="documents" name="documents" multiple>
+            </div>
+
+            {% if error_message %}
+            <div class="error-message">
+                {{ error_message }}
+            </div>
+            {% endif %}
+
+            <button type="submit">Create Bill</button>
         </form>
     </main>
+
+    <style>
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="datetime-local"],
+        textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            color: red;
+            margin-bottom: 1rem;
+        }
+    </style>
 </body>
 </html> 

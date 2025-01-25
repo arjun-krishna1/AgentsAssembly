@@ -3,9 +3,11 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 from .models import Bill, AgentPreferences, Vote
 import json
-from django.db import models
+from django.db import models, transaction
+from datetime import datetime
 
 # Create your views here.
 
@@ -40,17 +42,48 @@ def agent_settings(request):
 def create_bill(request):
     """View for creating new bills"""
     if request.method == 'POST':
-        bill = Bill.objects.create(
-            title=request.POST['title'],
-            description=request.POST['description'],
-            created_by=request.user,
-            deadline=request.POST['deadline'],
-            funding_goal=request.POST['funding_goal'],
-            environmental_impact=request.POST['environmental_impact'],
-            economic_impact=request.POST['economic_impact'],
-            social_impact=request.POST['social_impact']
-        )
-        return redirect('dashboard')
+        try:
+            with transaction.atomic():
+                # Convert the datetime-local string to datetime object
+                deadline = datetime.strptime(
+                    request.POST['deadline'],
+                    '%Y-%m-%dT%H:%M'
+                ).replace(tzinfo=timezone.get_current_timezone())
+
+                # Create the bill
+                bill = Bill(
+                    title=request.POST['title'],
+                    description=request.POST['description'],
+                    deadline=deadline,
+                    funding_goal=request.POST['funding_goal'],
+                    environmental_impact=request.POST['environmental_impact'],
+                    economic_impact=request.POST['economic_impact'],
+                    social_impact=request.POST['social_impact']
+                )
+                
+                # Validate the bill
+                bill.full_clean()
+                bill.save()
+
+                # Handle document uploads
+                if request.FILES.getlist('documents'):
+                    for document in request.FILES.getlist('documents'):
+                        BillDocument.objects.create(
+                            bill=bill,
+                            document=document
+                        )
+
+                return redirect('dashboard')
+
+        except ValidationError as e:
+            return render(request, 'app/create_bill.html', {
+                'error_message': '; '.join(e.messages)
+            })
+        except Exception as e:
+            return render(request, 'app/create_bill.html', {
+                'error_message': str(e)
+            })
+
     return render(request, 'app/create_bill.html')
 
 # API endpoints

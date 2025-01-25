@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 
 class Bill(models.Model):
     STATUS_CHOICES = [
@@ -11,10 +12,9 @@ class Bill(models.Model):
 
     title = models.CharField(max_length=200)
     description = models.TextField()
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     deadline = models.DateTimeField()
-    funding_goal = models.PositiveIntegerField()
+    funding_goal = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     current_funding = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
     
@@ -39,7 +39,6 @@ class AgentPreferences(models.Model):
         ('AGGRESSIVE', 'Aggressive'),
     ]
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     environmental_weight = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(100)],
         default=50
@@ -59,16 +58,13 @@ class AgentPreferences(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.username}'s preferences"
+        return f"heres preferences"
 
 class Vote(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     bill = models.ForeignKey(Bill, on_delete=models.CASCADE)
     tokens_committed = models.PositiveIntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ['user', 'bill']
+    agent = models.ForeignKey(AgentPreferences, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"{self.user.username}'s vote on {self.bill.title}"
+        return f"vote on {self.bill.title}"
