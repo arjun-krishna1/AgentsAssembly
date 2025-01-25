@@ -46,31 +46,5 @@
             {% endfor %}
         </div>
     </main>
-
-    <script>
-        // Handle voting form submission
-        document.querySelectorAll('.vote-form').forEach(form => {
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const projectId = form.dataset.projectId;
-                const tokens = form.elements.tokens.value;
-                
-                try {
-                    const response = await fetch(`/api/projects/${projectId}/vote/`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ tokens: parseInt(tokens) })
-                    });
-                    if (response.ok) {
-                        location.reload();
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            });
-        });
-    </script>
 </body>
 </html> 

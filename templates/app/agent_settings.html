@@ -17,33 +17,59 @@
     <main>
         <h1>Voting Agent Settings</h1>
         
-        <form id="preferencesForm">
+        <form method="POST" action="{% url 'agent_settings' %}">
+            {% csrf_token %}
             <h2>Impact Preferences</h2>
-            <div>
-                <label>Environmental Impact (0-100):
-                    <input type="range" min="0" max="100" name="environmental">
+            <div class="form-group">
+                <label for="environmental">Environmental Impact (0-100):
+                    <input type="range" min="0" max="100" name="environmental" id="environmental" 
+                           value="{{ preferences.environmental_weight|default:50 }}">
                 </label>
             </div>
-            <div>
-                <label>Economic Growth (0-100):
-                    <input type="range" min="0" max="100" name="economic">
+            <div class="form-group">
+                <label for="economic">Economic Growth (0-100):
+                    <input type="range" min="0" max="100" name="economic" id="economic"
+                           value="{{ preferences.economic_weight|default:50 }}">
                 </label>
             </div>
-            <div>
-                <label>Social Welfare (0-100):
-                    <input type="range" min="0" max="100" name="social">
+            <div class="form-group">
+                <label for="social">Social Welfare (0-100):
+                    <input type="range" min="0" max="100" name="social" id="social"
+                           value="{{ preferences.social_weight|default:50 }}">
                 </label>
             </div>
 
             <h2>Token Allocation Strategy</h2>
-            <select name="strategy">
-                <option value="conservative">Conservative</option>
-                <option value="moderate">Moderate</option>
-                <option value="aggressive">Aggressive</option>
+            <select name="strategy" id="strategy">
+                <option value="CONSERVATIVE" {% if preferences.token_strategy == 'CONSERVATIVE' %}selected{% endif %}>Conservative</option>
+                <option value="MODERATE" {% if preferences.token_strategy == 'MODERATE' %}selected{% endif %}>Moderate</option>
+                <option value="AGGRESSIVE" {% if preferences.token_strategy == 'AGGRESSIVE' %}selected{% endif %}>Aggressive</option>
             </select>
+
+            {% if error_message %}
+            <div class="error-message">
+                {{ error_message }}
+            </div>
+            {% endif %}
 
             <button type="submit">Save Preferences</button>
         </form>
     </main>
+
+    <style>
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .error-message {
+            color: red;
+            margin-bottom: 1rem;
+        }
+    </style>
 </body>
 </html> 

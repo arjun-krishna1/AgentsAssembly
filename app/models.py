@@ -13,7 +13,7 @@ class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    deadline = models.DateTimeField()
+    deadline = models.DateTimeField(null=True)
     funding_goal = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     current_funding = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')

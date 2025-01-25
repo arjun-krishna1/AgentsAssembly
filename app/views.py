@@ -42,17 +42,11 @@ def create_project(request):
     if request.method == 'POST':
         try:
             with transaction.atomic():
-                # Convert the datetime-local string to datetime object
-                deadline = datetime.strptime(
-                    request.POST['deadline'],
-                    '%Y-%m-%dT%H:%M'
-                ).replace(tzinfo=timezone.get_current_timezone())
 
                 # Create the project
                 project = Project(
                     title=request.POST['title'],
                     description=request.POST['description'],
-                    deadline=deadline,
                     funding_goal=request.POST['funding_goal'],
                     environmental_impact=request.POST['environmental_impact'],
                     economic_impact=request.POST['economic_impact'],
