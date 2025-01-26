@@ -45,6 +45,17 @@ def create_project(request):
         try:
             with transaction.atomic():
 
+                import subprocess
+                command = f"""npx tsx ./src/ts/create_project.ts --name {request.POST['title']}"""
+                result = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+                # Access the stdout
+                if result.returncode == 0:  # Check if the command was successful
+                    project_id = result.stdout.strip()  # Remove any extra whitespace
+                    print("Project ID:", project_id)
+                else:
+                    print("Error:", result.stderr)  # Print any errors
+
                 # Create the project
                 project = Project(
                     title=request.POST['title'],
@@ -57,6 +68,8 @@ def create_project(request):
                 
                 # Validate and save the project
                 project.save()
+
+
 
                 # Get all agent preferences
                 agents = AgentPreferences.objects.all()
