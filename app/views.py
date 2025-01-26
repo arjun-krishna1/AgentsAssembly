@@ -59,7 +59,7 @@ def create_project(request):
                 # Create the project
                 project = Project(
                     title=request.POST['title'],
-                    description=request.POST['description'],
+                    description=request.POST['description'] + "\n<br/><a href='https://explorer.story.foundation/ipa/" + project_id + "'>Project Story Link</a>",
                     funding_goal=request.POST['funding_goal'],
                     environmental_impact=request.POST['environmental_impact'],
                     economic_impact=request.POST['economic_impact'],
