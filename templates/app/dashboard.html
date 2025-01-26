@@ -133,6 +133,21 @@
         .vote-form button:hover {
             background-color: var(--secondary-color);
         }
+
+        .story-link {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            margin: 0.5rem 0;
+            transition: background-color 0.2s;
+        }
+
+        .story-link:hover {
+            background-color: var(--secondary-color);
+        }
     </style>
 </head>
 <body>
@@ -164,6 +179,7 @@
                 </div>
                 <p>Funding: {{ project.current_funding }} / {{ project.funding_goal }}</p>
                 <p>Status: {{ project.status }}</p>
+                <a href="https://explorer.story.foundation/ipa/{{ project.story_id }}" class="story-link" target="_blank">Project Story Link</a>
                 {% if project.status == 'PENDING' %}
                 <form class="vote-form" data-project-id="{{ project.id }}">
                     <input type="number" name="tokens" min="0" placeholder="Tokens to commit">

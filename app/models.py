@@ -17,6 +17,7 @@ class Project(models.Model):
     funding_goal = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     current_funding = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    story_id = models.CharField(max_length=200, null=True)
     
     # Impact statements
     environmental_impact = models.TextField(blank=True)
